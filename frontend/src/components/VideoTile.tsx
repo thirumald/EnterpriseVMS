@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { api, ApiError, type Device } from "../api";
+import { clipFor, mediaUrl, useClips } from "../media";
 
 // One shared ~15 fps loop drives every tile; far cheaper than a rAF per canvas.
 const drawers = new Set<(t: number) => void>();
@@ -26,14 +27,19 @@ function makeActors(seed: number): Actor[] {
 type Access = "pending" | "ok" | "denied" | "error";
 
 /**
- * Simulated camera feed. Real deployments swap the canvas for a WebRTC / WebCodecs <video> bound to the
- * stream token issued by POST /api/streams/{id}/token — RBAC is enforced when that token is issued.
+ * Camera tile. Plays real footage from public/media/manifest.json when present (RBAC is still enforced by the
+ * stream-token request); otherwise falls back to a simulated canvas feed. A production deployment swaps the
+ * <video src> for a WebRTC / HLS stream bound to the token from POST /api/streams/{id}/token.
  */
 export function VideoTile({ device, tier = "T2", focus, onClick }: { device: Device; tier?: string; focus?: boolean; onClick?: () => void }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const [access, setAccess] = useState<Access>("pending");
   const [reason, setReason] = useState("");
   const offline = device.status !== "active";
+  const clips = useClips();
+  const pick = clipFor(device.id, clips);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const useVideo = !!pick && !videoFailed;
 
   useEffect(() => {
     let cancelled = false;
@@ -47,7 +53,7 @@ export function VideoTile({ device, tier = "T2", focus, onClick }: { device: Dev
 
   useEffect(() => {
     const c = ref.current;
-    if (!c || access !== "ok" || offline) return;
+    if (!c || access !== "ok" || offline || useVideo) return;
     const ctx = c.getContext("2d");
     if (!ctx) return;
     const seed = hash(device.id);
@@ -78,14 +84,20 @@ export function VideoTile({ device, tier = "T2", focus, onClick }: { device: Dev
       for (let i = 0; i < 40; i++) ctx.fillRect(Math.random() * W, Math.random() * H, 1.5, 1.5);
       ctx.fillStyle = "rgba(34,211,238,0.05)"; ctx.fillRect(0, ((t / 20) % (H + 20)) - 10, W, 3);
     });
-  }, [access, offline, device.id]);
+  }, [access, offline, device.id, useVideo]);
 
   return (
     <div className={`tile${focus ? " focus" : ""}`} onClick={onClick} role="button" tabIndex={0} aria-label={`Camera ${device.name}`}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick?.()}>
-      <canvas ref={ref} width={320} height={180} />
+      {useVideo ? (
+        <video
+          key={pick.clip.src} src={mediaUrl(pick.clip.src)} poster={pick.clip.poster ? mediaUrl(pick.clip.poster) : undefined}
+          muted loop playsInline autoPlay preload="metadata" onError={() => setVideoFailed(true)}
+          onLoadedMetadata={(e) => { const v = e.currentTarget; if (v.duration > 4) v.currentTime = (pick.seed % 1000) / 1000 * (v.duration - 2); }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+      ) : <canvas ref={ref} width={320} height={180} />}
       <div className="hud top"><span>{device.name}</span><span className={access === "ok" && !offline ? "rec" : ""}>{tier}</span></div>
-      <div className="hud bot"><span>{String(device.attrs.codec ?? "H.265")} · {String(device.attrs.resolution ?? "4MP")}</span><span>{device.siteId}</span></div>
+      <div className="hud bot"><span>{String(device.attrs.codec ?? "H.265")} · {String(device.attrs.resolution ?? "4MP")}{useVideo ? "" : " · SIMULATED"}</span><span>{device.siteId}</span></div>
       {offline && <div className="overlay">NO SIGNAL<br /><span className="faint">RTSP keepalive lost</span></div>}
       {!offline && access === "pending" && <div className="overlay">Requesting stream token…</div>}
       {!offline && access === "denied" && <div className="overlay denied">ACCESS DENIED<br /><span className="faint">{reason}</span></div>}

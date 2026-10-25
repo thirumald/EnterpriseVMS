@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { mediaUrl } from "../media";
 import type { Severity } from "../api";
 
 export function Badge({ kind, children }: { kind: string; children?: ReactNode }) {
@@ -45,3 +46,11 @@ export const ago = (iso: string) => {
   const s = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
   return s < 60 ? `${s}s ago` : s < 3600 ? `${Math.floor(s / 60)}m ago` : `${Math.floor(s / 3600)}h ago`;
 };
+
+/** Site photo from public/media/sites/<id>.jpg; shows a neutral placeholder until a photo is added. */
+export function SiteImage({ id, name, size = 44 }: { id: string; name: string; size?: number }) {
+  const [broken, setBroken] = useState(false);
+  const box = { width: size * 1.45, height: size, borderRadius: 8, flex: "none" as const };
+  if (broken) return <div aria-hidden style={{ ...box, background: "linear-gradient(135deg,#1b2436,#0f1524)", border: "1px solid var(--glass-border)", display: "grid", placeItems: "center", color: "var(--text-faint)", fontSize: 11 }}>{name.slice(0, 2).toUpperCase()}</div>;
+  return <img src={mediaUrl(`media/sites/${id}.jpg`)} alt={name} loading="lazy" onError={() => setBroken(true)} style={{ ...box, objectFit: "cover", border: "1px solid var(--glass-border)" }} />;
+}

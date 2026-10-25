@@ -44,7 +44,7 @@ Demo users (password `Sentinel!2026`, MFA code `246810`): `admin`, `agencyadmin`
 
 | Item | Status |
 |---|---|
-| Real media path (ONVIF/RTSP ingest, recording, multicast, WebRTC, transcoding) | Video tiles are **simulated canvases**. RBAC is real: `POST /api/streams/{id}/token` issues a 60 s signed token only if `video.live` is allowed. The media plane (GStreamer/FFmpeg workers, multicast origin, NVENC AV1 tiers) is the next build. |
+| Real media path (ONVIF/RTSP ingest, recording, multicast, WebRTC, transcoding) | Tiles play real clips from `frontend/public/media` when provided (see its README), otherwise a labelled **simulated canvas**. RBAC is real: `POST /api/streams/{id}/token` issues a 60 s signed token only if `video.live` is allowed. The media plane (GStreamer/FFmpeg workers, multicast origin, NVENC AV1 tiers) is the next build. |
 | Federation (Edge ↔ Main), Patroni HA, NATS JetStream store-and-forward | Single database and process here. Schema and services are site-aware (`site_id`, ltree paths) so they can split per Edge. |
 | AD / SAML / OIDC | Local PBKDF2 users + a demo MFA code. The JWT/claims layer is where an external IdP plugs in. |
 | Production PKI | `DevCa` is an in-memory dev CA. Swap for step-ca / ADCS / Vault PKI with per-Edge sub-CAs. |
@@ -57,4 +57,4 @@ Demo users (password `Sentinel!2026`, MFA code `246810`): `admin`, `agencyadmin`
 | `db/init/001` + `002` on PostgreSQL 16 + PostGIS | Applied cleanly. The RBAC scope predicates, MVT tiles, KNN, FOV containment, geofence breach and telemetry queries used by the API were executed against it. |
 | `003_timescale.sql` | **Not run** (no TimescaleDB server available when this was written). |
 | Frontend `tsc`, `vite build`, vitest (5 RBAC tests) | Pass. All five views exercised in headless Chromium with no console errors. |
-| Backend C# (`dotnet build`, xUnit tests, Docker image) | **Not compiled or run**: no .NET SDK was available in the authoring environment. Run `dotnet test backend/Sentinel.slnx` first and expect to fix small compile issues. |
+| Backend C# (`dotnet build`, xUnit tests, Docker image) | Built and tested in GitHub Actions CI (passing). Not run end-to-end against a live database yet. |

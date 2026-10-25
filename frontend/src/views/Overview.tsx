@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { api, SEVERITY_ORDER, type HealthSummary } from "../api";
-import { Badge, Kpi, Panel, Spark, SeverityBadge, ago } from "../components/ui";
+import { Badge, Kpi, Panel, SiteImage, Spark, SeverityBadge, ago } from "../components/ui";
 import { can, useStore } from "../state/store";
 
 const METRIC_LABEL: Record<string, [string, string]> = {
@@ -77,7 +77,7 @@ export function Overview() {
                   const pct = t?.devices ? Math.round((t.up / t.devices) * 100) : 0;
                   return (
                     <tr key={s.id}>
-                      <td>{s.name}</td>
+                      <td><div className="row"><SiteImage id={s.id} name={s.name} size={32} />{s.name}</div></td>
                       <td><Badge kind={s.status === "online" ? "online" : "offline"} /></td>
                       <td className="num">{t ? `${t.camsUp}/${t.cams}` : "—"}</td>
                       <td className="num">{t?.radars ?? "—"}</td>
