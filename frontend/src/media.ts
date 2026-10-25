@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export interface Clip { src: string; poster?: string; title?: string; credit?: string }
+export interface Clip { src: string; webm?: string; poster?: string; title?: string; credit?: string }
 
 const base = import.meta.env.BASE_URL;
 export const mediaUrl = (path: string) => base + path.replace(/^\//, "");

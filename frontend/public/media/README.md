@@ -11,7 +11,7 @@ Real footage and photos are plain files here, picked up at runtime — no code c
 ```
 
 Each camera is assigned a clip deterministically and starts at a different offset. MP4 (H.264) plays everywhere; add WebM if you need it.
-Keep clips short (10–30 s, ≤ 8 MB, 720p) so the GitHub Pages site stays fast. With an empty manifest the tiles fall back to a labelled **SIMULATED** canvas feed.
+The bundled clips are **generated samples** (procedurally rendered, labelled in-frame), not real footage; replace them with real clips. Optional `webm` is a fallback source. Keep clips short (10–30 s, ≤ 8 MB, 720p) so the GitHub Pages site stays fast. With an empty manifest the tiles fall back to a labelled **SIMULATED** canvas feed.
 
 **Photos** — `sites/<site-id>.jpg` (`portgate`, `airport`, `metro`, `refinery`, `toll`, `hq`), roughly 480×330.
 

@@ -1,3 +1,8 @@
 {
-  "clips": []
+  "clips": [
+    { "src": "media/video/gate.mp4",   "webm": "media/video/gate.webm",   "poster": "media/video/gate.jpg",   "title": "Port gate",     "credit": "Generated sample (procedurally rendered, not real footage)" },
+    { "src": "media/video/street.mp4", "webm": "media/video/street.webm", "poster": "media/video/street.jpg", "title": "City street",   "credit": "Generated sample (procedurally rendered, not real footage)" },
+    { "src": "media/video/plaza.mp4",  "webm": "media/video/plaza.webm",  "poster": "media/video/plaza.jpg",  "title": "Public plaza",  "credit": "Generated sample (procedurally rendered, not real footage)" },
+    { "src": "media/video/toll.mp4",   "webm": "media/video/toll.webm",   "poster": "media/video/toll.jpg",   "title": "Toll plaza",    "credit": "Generated sample (procedurally rendered, not real footage)" }
+  ]
 }

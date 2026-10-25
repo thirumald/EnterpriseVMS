@@ -91,13 +91,16 @@ export function VideoTile({ device, tier = "T2", focus, onClick }: { device: Dev
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick?.()}>
       {useVideo ? (
         <video
-          key={pick.clip.src} src={mediaUrl(pick.clip.src)} poster={pick.clip.poster ? mediaUrl(pick.clip.poster) : undefined}
+          key={pick.clip.src} poster={pick.clip.poster ? mediaUrl(pick.clip.poster) : undefined}
           muted loop playsInline autoPlay preload="metadata" onError={() => setVideoFailed(true)}
           onLoadedMetadata={(e) => { const v = e.currentTarget; if (v.duration > 4) v.currentTime = (pick.seed % 1000) / 1000 * (v.duration - 2); }}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}>
+          <source src={mediaUrl(pick.clip.src)} type="video/mp4" />
+          {pick.clip.webm && <source src={mediaUrl(pick.clip.webm)} type="video/webm" onError={() => setVideoFailed(true)} />}
+        </video>
       ) : <canvas ref={ref} width={320} height={180} />}
       <div className="hud top"><span>{device.name}</span><span className={access === "ok" && !offline ? "rec" : ""}>{tier}</span></div>
-      <div className="hud bot"><span>{String(device.attrs.codec ?? "H.265")} · {String(device.attrs.resolution ?? "4MP")}{useVideo ? "" : " · SIMULATED"}</span><span>{device.siteId}</span></div>
+      <div className="hud bot"><span>{useVideo ? "" : `${String(device.attrs.codec ?? "H.265")} · ${String(device.attrs.resolution ?? "4MP")} · SIMULATED`}</span><span>{device.siteId}</span></div>
       {offline && <div className="overlay">NO SIGNAL<br /><span className="faint">RTSP keepalive lost</span></div>}
       {!offline && access === "pending" && <div className="overlay">Requesting stream token…</div>}
       {!offline && access === "denied" && <div className="overlay denied">ACCESS DENIED<br /><span className="faint">{reason}</span></div>}
