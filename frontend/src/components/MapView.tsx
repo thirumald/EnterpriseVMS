@@ -7,7 +7,9 @@ import { useStore } from "../state/store";
 import { Badge, Panel } from "./ui";
 import { VideoTile } from "./VideoTile";
 
-const STYLE: StyleSpecification = {
+const GOOGLE_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim();
+
+const CARTO_STYLE: StyleSpecification = {
   version: 8,
   sources: {
     base: {
@@ -20,6 +22,43 @@ const STYLE: StyleSpecification = {
     { id: "base", type: "raster", source: "base", paint: { "raster-opacity": 0.9 } },
   ],
 };
+
+/**
+ * With VITE_GOOGLE_MAPS_API_KEY set, the basemap comes from the Google Map Tiles API (2D tiles, dark-styled).
+ * The key ships in the browser bundle by design: restrict it to your site's HTTP referrers and to the
+ * "Map Tiles API" in Google Cloud. Without a key, or if Google rejects it, we fall back to CARTO.
+ */
+async function resolveStyle(): Promise<StyleSpecification> {
+  if (!GOOGLE_KEY) return CARTO_STYLE;
+  try {
+    const res = await fetch(`https://tile.googleapis.com/v1/createSession?key=${encodeURIComponent(GOOGLE_KEY)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mapType: "roadmap", language: "en-US", region: "IN",
+        styles: [{ stylers: [{ invert_lightness: true }, { saturation: -55 }, { lightness: -10 }] }],
+      }),
+    });
+    if (!res.ok) throw new Error(`createSession ${res.status}`);
+    const { session } = (await res.json()) as { session: string };
+    return {
+      version: 8,
+      sources: {
+        base: {
+          type: "raster", tileSize: 256, attribution: "© Google",
+          tiles: [`https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=${session}&key=${encodeURIComponent(GOOGLE_KEY)}`],
+        },
+      },
+      layers: [
+        { id: "bg", type: "background", paint: { "background-color": "#0b0f17" } },
+        { id: "base", type: "raster", source: "base" },
+      ],
+    };
+  } catch (e) {
+    console.warn("Google Maps unavailable, using fallback basemap:", e);
+    return CARTO_STYLE;
+  }
+}
 
 const EMPTY: FeatureCollection = { type: "FeatureCollection", features: [] };
 const LAYERS = [
@@ -44,9 +83,9 @@ export function MapView() {
 
   // ---- create map once
   useEffect(() => {
-    if (!host.current) return;
-    const map = new maplibregl.Map({ container: host.current, style: STYLE, center: [72.9, 19.05], zoom: 10.2, attributionControl: { compact: true } });
-    mapRef.current = map;
+    let cancelled = false;
+    let created: MLMap | null = null;
+    const setup = (map: MLMap) => {
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
     map.on("load", async () => {
       for (const id of ["fov", "fence", "dev", "trk", "trail", "alm"]) map.addSource(id, { type: "geojson", data: EMPTY });
@@ -94,7 +133,14 @@ export function MapView() {
       (map.getSource("fence") as GeoJSONSource).setData(fences);
       setReady(true);
     });
-    return () => { map.remove(); mapRef.current = null; };
+    };
+    void resolveStyle().then((style) => {
+      if (cancelled || !host.current) return;
+      created = new maplibregl.Map({ container: host.current, style, center: [72.9, 19.05], zoom: 10.2, attributionControl: { compact: true } });
+      mapRef.current = created;
+      setup(created);
+    });
+    return () => { cancelled = true; created?.remove(); mapRef.current = null; };
   }, []);
 
   // ---- data -> sources
