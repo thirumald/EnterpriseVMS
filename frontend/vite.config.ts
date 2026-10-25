@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 // VITE_API_URL unset  -> in-browser simulator (no backend needed)
 // VITE_API_URL=/api-proxy style setups can be added via the dev proxy below.
 export default defineConfig({
+  base: process.env.VITE_BASE ?? "/",
   plugins: [react()],
   server: {
     port: 5173,
