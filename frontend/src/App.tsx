@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "./api";
 import { Badge } from "./components/ui";
 import { Footer } from "./components/Footer";
+import { APP_NAME } from "./config";
 import { can, useStore, type View } from "./state/store";
 import { Access } from "./views/Access";
 import { Devices } from "./views/Devices";
@@ -46,7 +47,7 @@ export default function App() {
   return (
     <div className="shell">
       <header className="glass topbar">
-        <div className="brand"><Shield /><div>SentinelHub <small>Command</small></div></div>
+        <div className="brand"><Shield /><div>{APP_NAME} <small>Command</small></div></div>
         <nav className="nav" aria-label="Primary">
           {nav.map((n) => <button key={n.id} aria-current={current === n.id ? "page" : undefined} onClick={() => { location.hash = n.id; }}>{n.label}</button>)}
         </nav>

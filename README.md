@@ -1,4 +1,4 @@
-# SentinelHub — Distributed VMS & Unified Command Platform
+# Presight Sentinel — Distributed VMS & Unified Command Platform
 
 A working reference implementation of the architecture: a **.NET 9** backend on **PostgreSQL + PostGIS + TimescaleDB**, and a **React 19** dark-mode command-center console. It lives in this folder and is independent of the DeskCharm app in the repo root.
 

@@ -1,3 +1,3 @@
 /** Name shown in the footer. Change it here. */
 export const OWNER_NAME = "Thirumal D";
-export const APP_NAME = "SentinelHub";
+export const APP_NAME = "Presight Sentinel";

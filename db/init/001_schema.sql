@@ -1,4 +1,4 @@
--- SentinelHub core schema. Runs on PostgreSQL 15+ with PostGIS. TimescaleDB is optional (see 003).
+-- Presight Sentinel core schema. Runs on PostgreSQL 15+ with PostGIS. TimescaleDB is optional (see 003).
 CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS ltree;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;

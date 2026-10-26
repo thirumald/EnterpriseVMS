@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { api } from "../api";
 import { Footer } from "../components/Footer";
+import { APP_NAME } from "../config";
 import { useStore } from "../state/store";
 
 const DEMO = [
@@ -19,7 +20,7 @@ export function Login() {
   return (
     <div className="login">
       <form className="glass card" onSubmit={submit}>
-        <div className="brand"><Shield /> <div>SentinelHub<br /><small>Unified Command Platform</small></div></div>
+        <div className="brand"><Shield /> <div>{APP_NAME}<br /><small>Unified Command Platform</small></div></div>
         <h1>Sign in</h1>
         <label>Username<input value={u} onChange={(e) => setU(e.target.value)} autoComplete="username" required /></label>
         <label>Password<input type="password" value={p} onChange={(e) => setP(e.target.value)} autoComplete="current-password" required /></label>
@@ -32,7 +33,7 @@ export function Login() {
           <div className="faint" style={{ marginBottom: 6 }}>Demo accounts (password <span className="mono">Sentinel!2026</span>)</div>
           <div className="chips">{DEMO.map(([id, label]) => <button type="button" key={id} className="chip" onClick={() => setU(id)}>{label}</button>)}</div>
         </div>
-        <div className="faint">{api.mode === "mock" ? "Running on the in-browser simulator (no backend)." : "Connected to the SentinelHub API."}</div>
+        <div className="faint">{api.mode === "mock" ? "Running on the in-browser simulator (no backend)." : `Connected to the ${APP_NAME} API.`}</div>
       </form>
       <div className="login-footer"><Footer /></div>
     </div>
