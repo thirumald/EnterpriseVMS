@@ -1,8 +1,67 @@
 {
   "clips": [
-    { "src": "media/video/gate.mp4",   "webm": "media/video/gate.webm",   "poster": "media/video/gate.jpg",   "title": "Port gate",     "credit": "Generated sample (procedurally rendered, not real footage)" },
-    { "src": "media/video/street.mp4", "webm": "media/video/street.webm", "poster": "media/video/street.jpg", "title": "City street",   "credit": "Generated sample (procedurally rendered, not real footage)" },
-    { "src": "media/video/plaza.mp4",  "webm": "media/video/plaza.webm",  "poster": "media/video/plaza.jpg",  "title": "Public plaza",  "credit": "Generated sample (procedurally rendered, not real footage)" },
-    { "src": "media/video/toll.mp4",   "webm": "media/video/toll.webm",   "poster": "media/video/toll.jpg",   "title": "Toll plaza",    "credit": "Generated sample (procedurally rendered, not real footage)" }
+    {
+      "src": "media/video/gate.mp4",
+      "webm": "media/video/gate.webm",
+      "poster": "media/video/gate.jpg",
+      "title": "Port gate",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/street.mp4",
+      "webm": "media/video/street.webm",
+      "poster": "media/video/street.jpg",
+      "title": "City street",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/plaza.mp4",
+      "webm": "media/video/plaza.webm",
+      "poster": "media/video/plaza.jpg",
+      "title": "Public plaza",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/toll.mp4",
+      "webm": "media/video/toll.webm",
+      "poster": "media/video/toll.jpg",
+      "title": "Toll plaza",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/parking.mp4",
+      "webm": "media/video/parking.webm",
+      "poster": "media/video/parking.jpg",
+      "title": "Car park (overhead)",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/terminal.mp4",
+      "webm": "media/video/terminal.webm",
+      "poster": "media/video/terminal.jpg",
+      "title": "Airport terminal corridor",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/perimeter.mp4",
+      "webm": "media/video/perimeter.webm",
+      "poster": "media/video/perimeter.jpg",
+      "title": "Perimeter fence (thermal)",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/harbour.mp4",
+      "webm": "media/video/harbour.webm",
+      "poster": "media/video/harbour.jpg",
+      "title": "Harbour quayside",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    },
+    {
+      "src": "media/video/highway.mp4",
+      "webm": "media/video/highway.webm",
+      "poster": "media/video/highway.jpg",
+      "title": "Highway E11",
+      "credit": "Generated sample (procedurally rendered, not real footage)"
+    }
   ]
 }
