@@ -32,14 +32,14 @@ SELECT r, p FROM (VALUES
  ('service_account', ARRAY['video.live','video.playback','alarm.handle','geo.view','telemetry.view','device.create','device.configure','health.view'])
 ) v(r, perms), unnest(v.perms) p;
 
--- ------------------------------------------------ sites (Mumbai region demo)
+-- ------------------------------------------------ sites (Abu Dhabi demo; coordinates approximate)
 INSERT INTO inventory.site (id, name, kind, node_path, geom, wan_mbps) VALUES
- ('hq',       'Main DC - Command Center',  'main', 'sentinel.hq',            ST_SetSRID(ST_MakePoint(72.8777, 19.0760),4326), 0),
- ('portgate', 'Port Gate Alpha',           'edge', 'sentinel.west.portgate', ST_SetSRID(ST_MakePoint(72.9500, 18.9490),4326), 6.4),
- ('airport',  'Airport Terminal 2',        'edge', 'sentinel.west.airport',  ST_SetSRID(ST_MakePoint(72.8656, 19.0896),4326), 7.1),
- ('metro',    'Metro Hub Central',         'edge', 'sentinel.west.metro',    ST_SetSRID(ST_MakePoint(72.8562, 19.0176),4326), 5.9),
- ('refinery', 'Refinery Complex',          'edge', 'sentinel.west.refinery', ST_SetSRID(ST_MakePoint(72.8997, 19.0522),4326), 5.2),
- ('toll',     'Highway Toll Plaza',        'edge', 'sentinel.west.toll',     ST_SetSRID(ST_MakePoint(72.9998, 19.1580),4326), 4.8);
+ ('hq', 'Main DC - Command Center',  'main', 'sentinel.hq',            ST_SetSRID(ST_MakePoint(54.3773, 24.4539),4326), 0),
+ ('portgate', 'Khalifa Port Gate',           'edge', 'sentinel.west.portgate', ST_SetSRID(ST_MakePoint(54.6444, 24.8083),4326), 6.4),
+ ('airport', 'Zayed International Airport',        'edge', 'sentinel.west.airport',  ST_SetSRID(ST_MakePoint(54.6511, 24.4330),4326), 7.1),
+ ('metro', 'Al Wahda Transit Hub',         'edge', 'sentinel.west.metro',    ST_SetSRID(ST_MakePoint(54.3720, 24.4780),4326), 5.9),
+ ('refinery', 'Mussafah Industrial Complex',          'edge', 'sentinel.west.refinery', ST_SetSRID(ST_MakePoint(54.4950, 24.3530),4326), 5.2),
+ ('toll', 'Maqta Bridge Toll Gate',        'edge', 'sentinel.west.toll',     ST_SetSRID(ST_MakePoint(54.5030, 24.4090),4326), 4.8);
 
 -- ------------------------------------------------ devices, FOVs, geofences
 DO $$

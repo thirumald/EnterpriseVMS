@@ -13,12 +13,12 @@ export function mulberry32(seed: number) {
 }
 
 export const SITES: Site[] = [
-  { id: "hq", name: "Main DC - Command Center", kind: "main", nodePath: "sentinel.hq", lon: 72.8777, lat: 19.076, wanMbps: 0, status: "online" },
-  { id: "portgate", name: "Port Gate Alpha", kind: "edge", nodePath: "sentinel.west.portgate", lon: 72.95, lat: 18.949, wanMbps: 6.4, status: "online" },
-  { id: "airport", name: "Airport Terminal 2", kind: "edge", nodePath: "sentinel.west.airport", lon: 72.8656, lat: 19.0896, wanMbps: 7.1, status: "online" },
-  { id: "metro", name: "Metro Hub Central", kind: "edge", nodePath: "sentinel.west.metro", lon: 72.8562, lat: 19.0176, wanMbps: 5.9, status: "online" },
-  { id: "refinery", name: "Refinery Complex", kind: "edge", nodePath: "sentinel.west.refinery", lon: 72.8997, lat: 19.0522, wanMbps: 5.2, status: "online" },
-  { id: "toll", name: "Highway Toll Plaza", kind: "edge", nodePath: "sentinel.west.toll", lon: 72.9998, lat: 19.158, wanMbps: 4.8, status: "online" },
+  { id: "hq", name: "Main DC - Command Center", kind: "main", nodePath: "sentinel.hq", lon: 54.3773, lat: 24.4539, wanMbps: 0, status: "online" },
+  { id: "portgate", name: "Khalifa Port Gate", kind: "edge", nodePath: "sentinel.west.portgate", lon: 54.6444, lat: 24.8083, wanMbps: 6.4, status: "online" },
+  { id: "airport", name: "Zayed International Airport", kind: "edge", nodePath: "sentinel.west.airport", lon: 54.6511, lat: 24.433, wanMbps: 7.1, status: "online" },
+  { id: "metro", name: "Al Wahda Transit Hub", kind: "edge", nodePath: "sentinel.west.metro", lon: 54.372, lat: 24.478, wanMbps: 5.9, status: "online" },
+  { id: "refinery", name: "Mussafah Industrial Complex", kind: "edge", nodePath: "sentinel.west.refinery", lon: 54.495, lat: 24.353, wanMbps: 5.2, status: "online" },
+  { id: "toll", name: "Maqta Bridge Toll Gate", kind: "edge", nodePath: "sentinel.west.toll", lon: 54.503, lat: 24.409, wanMbps: 4.8, status: "online" },
 ];
 
 const VENDORS = ["Axis", "Hanwha", "Bosch", "Hikvision"];

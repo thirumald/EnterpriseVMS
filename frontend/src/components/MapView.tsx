@@ -55,7 +55,7 @@ async function resolveStyle(): Promise<StyleSpecification> {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        mapType: "roadmap", language: "en-US", region: "IN",
+        mapType: "roadmap", language: "en-US", region: "AE",
         styles: [{ stylers: [{ invert_lightness: true }, { saturation: -55 }, { lightness: -10 }] }],
       }),
     });
@@ -160,7 +160,7 @@ export function MapView() {
     };
     void resolveStyle().then((style) => {
       if (cancelled || !host.current) return;
-      created = new maplibregl.Map({ container: host.current, style, center: [72.9, 19.05], zoom: 10.2, attributionControl: { compact: true } });
+      created = new maplibregl.Map({ container: host.current, style, center: [54.5, 24.55], zoom: 9.4, attributionControl: { compact: true } });
       mapRef.current = created;
       setup(created);
     });
