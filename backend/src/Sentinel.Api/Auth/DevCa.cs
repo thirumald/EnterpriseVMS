@@ -14,7 +14,7 @@ public sealed class DevCa : IDisposable
     public DevCa()
     {
         using var key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
-        var req = new CertificateRequest("CN=Presight Sentinel Dev Issuing CA, O=Presight Sentinel", key, HashAlgorithmName.SHA256);
+        var req = new CertificateRequest("CN=Presight Vantage Dev Issuing CA, O=Presight Vantage", key, HashAlgorithmName.SHA256);
         req.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, false, 0, true));
         req.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.CrlSign, true));
         using var tmp = req.CreateSelfSigned(DateTimeOffset.UtcNow.AddMinutes(-5), DateTimeOffset.UtcNow.AddYears(5));

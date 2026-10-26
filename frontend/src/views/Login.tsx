@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { api } from "../api";
 import { Footer } from "../components/Footer";
-import { APP_NAME } from "../config";
+import { APP_NAME, APP_TAGLINE } from "../config";
 import { useStore } from "../state/store";
 
 const DEMO = [
@@ -20,7 +20,7 @@ export function Login() {
   return (
     <div className="login">
       <form className="glass card" onSubmit={submit}>
-        <div className="brand"><Shield /> <div>{APP_NAME}<br /><small>Unified Command Platform</small></div></div>
+        <div className="brand"><Shield /> <div>{APP_NAME}<br /><small>{APP_TAGLINE}</small></div></div>
         <h1>Sign in</h1>
         <label>Username<input value={u} onChange={(e) => setU(e.target.value)} autoComplete="username" required /></label>
         <label>Password<input type="password" value={p} onChange={(e) => setP(e.target.value)} autoComplete="current-password" required /></label>
