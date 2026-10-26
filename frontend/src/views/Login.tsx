@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { api } from "../api";
+import { Footer } from "../components/Footer";
 import { useStore } from "../state/store";
 
 const DEMO = [
@@ -33,6 +34,7 @@ export function Login() {
         </div>
         <div className="faint">{api.mode === "mock" ? "Running on the in-browser simulator (no backend)." : "Connected to the SentinelHub API."}</div>
       </form>
+      <div className="login-footer"><Footer /></div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { useStore } from "../state/store";
 import { Badge, Panel } from "./ui";
 import { VideoTile } from "./VideoTile";
 
+const GEOAPIFY_KEY = (import.meta.env.VITE_GEOAPIFY_API_KEY as string | undefined)?.trim();
 const GOOGLE_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim();
 
 const CARTO_STYLE: StyleSpecification = {
@@ -28,7 +29,26 @@ const CARTO_STYLE: StyleSpecification = {
  * The key ships in the browser bundle by design: restrict it to your site's HTTP referrers and to the
  * "Map Tiles API" in Google Cloud. Without a key, or if Google rejects it, we fall back to CARTO.
  */
+function geoapifyStyle(key: string): StyleSpecification {
+  return {
+    version: 8,
+    sources: {
+      base: {
+        type: "raster", tileSize: 256, maxzoom: 19,
+        attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank" rel="noreferrer">Geoapify</a> © OpenMapTiles © OpenStreetMap contributors',
+        tiles: [`https://maps.geoapify.com/v1/tile/dark-matter/{z}/{x}/{y}.png?apiKey=${encodeURIComponent(key)}`],
+      },
+    },
+    layers: [
+      { id: "bg", type: "background", paint: { "background-color": "#0b0f17" } },
+      { id: "base", type: "raster", source: "base" },
+    ],
+  };
+}
+
+/** Basemap priority: Geoapify (free tier) → Google Map Tiles → CARTO. */
 async function resolveStyle(): Promise<StyleSpecification> {
+  if (GEOAPIFY_KEY) return geoapifyStyle(GEOAPIFY_KEY);
   if (!GOOGLE_KEY) return CARTO_STYLE;
   try {
     const res = await fetch(`https://tile.googleapis.com/v1/createSession?key=${encodeURIComponent(GOOGLE_KEY)}`, {
@@ -76,6 +96,10 @@ export function MapView() {
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState<Record<string, boolean>>({ fov: true, fence: true, dev: true, trk: true, alm: true });
   const [selected, setSelected] = useState<Device | null>(null);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<{ label: string; lon: number; lat: number }[]>([]);
+  const [searchMsg, setSearchMsg] = useState("");
+  const marker = useRef<maplibregl.Marker | null>(null);
   const [pick, setPick] = useState<{ lon: number; lat: number; hits: CameraHit[] } | null>(null);
   const { devices, sites, tracks, events } = useStore();
   const devicesRef = useRef(devices);
@@ -140,7 +164,7 @@ export function MapView() {
       mapRef.current = created;
       setup(created);
     });
-    return () => { cancelled = true; created?.remove(); mapRef.current = null; };
+    return () => { cancelled = true; marker.current?.remove(); created?.remove(); mapRef.current = null; };
   }, []);
 
   // ---- data -> sources
@@ -189,11 +213,40 @@ export function MapView() {
     for (const l of LAYERS) for (const id of l.ids) map.setLayoutProperty(id, "visibility", visible[l.id] ? "visible" : "none");
   }, [ready, visible]);
 
+  async function search(e: React.FormEvent) {
+    e.preventDefault();
+    if (!GEOAPIFY_KEY || query.trim().length < 3) return;
+    setSearchMsg("Searching…"); setResults([]);
+    try {
+      const r = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(query)}&limit=5&format=json&apiKey=${encodeURIComponent(GEOAPIFY_KEY)}`);
+      if (!r.ok) throw new Error(String(r.status));
+      const j = (await r.json()) as { results?: { formatted: string; lon: number; lat: number }[] };
+      const list = (j.results ?? []).map((x) => ({ label: x.formatted, lon: x.lon, lat: x.lat }));
+      setResults(list); setSearchMsg(list.length ? "" : "No matches");
+    } catch { setSearchMsg("Address search unavailable"); }
+  }
+
+  function goTo(r: { label: string; lon: number; lat: number }) {
+    const map = mapRef.current;
+    if (!map) return;
+    marker.current?.remove();
+    marker.current = new maplibregl.Marker({ color: "#22d3ee" }).setLngLat([r.lon, r.lat]).addTo(map);
+    map.flyTo({ center: [r.lon, r.lat], zoom: 16, duration: 1200 });
+    setResults([]); setQuery(r.label);
+  }
+
   const fly = (lon: number, lat: number, zoom = 15.3) => mapRef.current?.flyTo({ center: [lon, lat], zoom, duration: 1200 });
 
   return (
     <div className="mapwrap">
       <div ref={host} />
+      {GEOAPIFY_KEY && (
+        <form className="glass map-search" onSubmit={search} role="search">
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search an address or place…" aria-label="Search address" />
+          {searchMsg && <div className="faint">{searchMsg}</div>}
+          {results.length > 0 && <ul>{results.map((r, i) => <li key={i}><button type="button" onClick={() => goTo(r)}>{r.label}</button></li>)}</ul>}
+        </form>
+      )}
       <div className="glass map-layers">
         <div className="panel-title">Layers</div>
         {LAYERS.map((l) => (

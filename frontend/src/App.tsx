@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
 import { Badge } from "./components/ui";
+import { Footer } from "./components/Footer";
 import { can, useStore, type View } from "./state/store";
 import { Access } from "./views/Access";
 import { Devices } from "./views/Devices";
@@ -67,6 +68,7 @@ export default function App() {
         {current === "devices" && <Devices />}
         {current === "access" && <Access />}
       </main>
+      <Footer />
 
       {flash && (
         <div className="glass toast" role="alert">
