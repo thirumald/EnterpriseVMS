@@ -102,15 +102,15 @@ END $$;
 
 -- ------------------------------------------------ demo users (fixed ids so grants can reference them)
 INSERT INTO iam.app_user (id, username, display_name, agency) VALUES
- ('00000000-0000-0000-0000-000000000001', 'admin',        'Priya Nair (Super-Admin)',        'Central IT'),
- ('00000000-0000-0000-0000-000000000002', 'policy',       'Rahul Mehta (Policy Admin)',      'CISO Office'),
- ('00000000-0000-0000-0000-000000000003', 'agencyadmin',  'Anita Rao (Agency Admin)',        'Agency A'),
- ('00000000-0000-0000-0000-000000000004', 'siteadmin',    'Karan Shah (Port Site Admin)',    'Agency A'),
- ('00000000-0000-0000-0000-000000000005', 'supervisor',   'Meera Iyer (Supervisor)',         'Agency A'),
- ('00000000-0000-0000-0000-000000000006', 'operator',     'Vikram Patil (Operator)',         'Agency A'),
- ('00000000-0000-0000-0000-000000000007', 'investigator', 'Sana Khan (Investigator)',        'Agency A'),
- ('00000000-0000-0000-0000-000000000008', 'exec',         'Director Sharma (Exec Viewer)',   'Leadership'),
- ('00000000-0000-0000-0000-000000000009', 'auditor',      'Neha Joshi (Auditor)',            'Compliance');
+ ('00000000-0000-0000-0000-000000000001', 'admin',        'Thirumal D (Super-Admin)',        'Central IT'),
+ ('00000000-0000-0000-0000-000000000002', 'policy',       'Thirumal D (Policy Admin)',      'CISO Office'),
+ ('00000000-0000-0000-0000-000000000003', 'agencyadmin',  'Thirumal D (Agency Admin)',        'Agency A'),
+ ('00000000-0000-0000-0000-000000000004', 'siteadmin',    'Thirumal D (Site Admin)',    'Agency A'),
+ ('00000000-0000-0000-0000-000000000005', 'supervisor',   'Thirumal D (Supervisor)',         'Agency A'),
+ ('00000000-0000-0000-0000-000000000006', 'operator',     'Thirumal D (Operator)',         'Agency A'),
+ ('00000000-0000-0000-0000-000000000007', 'investigator', 'Thirumal D (Investigator)',        'Agency A'),
+ ('00000000-0000-0000-0000-000000000008', 'exec',         'Thirumal D (Exec Viewer)',   'Leadership'),
+ ('00000000-0000-0000-0000-000000000009', 'auditor',      'Thirumal D (Auditor)',            'Compliance');
 
 INSERT INTO iam.grant (user_id, role_id, node_path, effect) VALUES
  ('00000000-0000-0000-0000-000000000001', 'super_admin',  'sentinel',               'allow'),

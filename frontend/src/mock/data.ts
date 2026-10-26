@@ -1,5 +1,6 @@
 import type { Device, EventItem, Site } from "../api/types";
 import type { Grant, RoleMap } from "../rbac/engine";
+import { OWNER_NAME } from "../config";
 
 // Deterministic PRNG so the demo looks the same on every load.
 export function mulberry32(seed: number) {
@@ -116,15 +117,15 @@ export const ROLE_PERMS: RoleMap = {
 export interface MockUser { id: string; username: string; displayName: string; agency: string; grants: Grant[] }
 const g = (roleId: string, nodePath: string, deny = false): Grant => ({ roleId, nodePath, deny });
 export const USERS: MockUser[] = [
-  { id: "u1", username: "admin", displayName: "Priya Nair (Super-Admin)", agency: "Central IT", grants: [g("super_admin", "sentinel")] },
-  { id: "u2", username: "policy", displayName: "Rahul Mehta (Policy Admin)", agency: "CISO Office", grants: [g("policy_admin", "sentinel")] },
-  { id: "u3", username: "agencyadmin", displayName: "Anita Rao (Agency Admin)", agency: "Agency A", grants: [g("agency_admin", "sentinel")] },
-  { id: "u4", username: "siteadmin", displayName: "Karan Shah (Port Site Admin)", agency: "Agency A", grants: [g("site_admin", "sentinel.west.portgate")] },
-  { id: "u5", username: "supervisor", displayName: "Meera Iyer (Supervisor)", agency: "Agency A", grants: [g("supervisor", "sentinel")] },
-  { id: "u6", username: "operator", displayName: "Vikram Patil (Operator)", agency: "Agency A", grants: [g("operator", "sentinel.west.portgate"), g("operator", "sentinel.west.airport"), g("operator", "sentinel.west.portgate.cam007", true)] },
-  { id: "u7", username: "investigator", displayName: "Sana Khan (Investigator)", agency: "Agency A", grants: [g("investigator", "sentinel.west.metro"), g("investigator", "sentinel.west.refinery")] },
-  { id: "u8", username: "exec", displayName: "Director Sharma (Exec Viewer)", agency: "Leadership", grants: [g("exec_viewer", "sentinel")] },
-  { id: "u9", username: "auditor", displayName: "Neha Joshi (Auditor)", agency: "Compliance", grants: [g("auditor", "sentinel")] },
+  { id: "u1", username: "admin", displayName: `${OWNER_NAME} (Super-Admin)`, agency: "Central IT", grants: [g("super_admin", "sentinel")] },
+  { id: "u2", username: "policy", displayName: `${OWNER_NAME} (Policy Admin)`, agency: "CISO Office", grants: [g("policy_admin", "sentinel")] },
+  { id: "u3", username: "agencyadmin", displayName: `${OWNER_NAME} (Agency Admin)`, agency: "Agency A", grants: [g("agency_admin", "sentinel")] },
+  { id: "u4", username: "siteadmin", displayName: `${OWNER_NAME} (Site Admin)`, agency: "Agency A", grants: [g("site_admin", "sentinel.west.portgate")] },
+  { id: "u5", username: "supervisor", displayName: `${OWNER_NAME} (Supervisor)`, agency: "Agency A", grants: [g("supervisor", "sentinel")] },
+  { id: "u6", username: "operator", displayName: `${OWNER_NAME} (Operator)`, agency: "Agency A", grants: [g("operator", "sentinel.west.portgate"), g("operator", "sentinel.west.airport"), g("operator", "sentinel.west.portgate.cam007", true)] },
+  { id: "u7", username: "investigator", displayName: `${OWNER_NAME} (Investigator)`, agency: "Agency A", grants: [g("investigator", "sentinel.west.metro"), g("investigator", "sentinel.west.refinery")] },
+  { id: "u8", username: "exec", displayName: `${OWNER_NAME} (Exec Viewer)`, agency: "Leadership", grants: [g("exec_viewer", "sentinel")] },
+  { id: "u9", username: "auditor", displayName: `${OWNER_NAME} (Auditor)`, agency: "Compliance", grants: [g("auditor", "sentinel")] },
 ];
 
 export const DEMO_PASSWORD = "Sentinel!2026";
